@@ -114,4 +114,25 @@ This log records every significant technical and architectural decision, the alt
 - **Alternative Rejected**: Full-table loading spinners that erase table contents and cause content jumping during background updates.
 - **Why**: Evaluators specifically assess UX states. TanStack Query's `keepPreviousData` combined with a subtle top progress bar allows users to keep reading existing data while page updates arrive in the background, eliminating jarring layout shifts.
 
+---
+
+### 17. Defensive Multi-Format Lead Parser in Pure Logic
+- **Decision**: Build a pure tokenizing parser in `src/lib/csvParser.ts` outside React components that strips UTF-8 BOM, normalizes CRLF line breaks, parses quoted fields containing commas/semicolons/tabs, and detects header rows.
+- **Alternative Rejected**: Pulling in a heavy external CSV library like `PapaParse`.
+- **Why**: Writing a lightweight, dedicated parser in ~140 lines of pure TypeScript makes the logic completely independent of the DOM, enables fast unit testing across messy CSV edge cases, eliminates external bundle bloat, and provides simple, defensible code during interview walk-throughs.
+
+---
+
+### 18. Deduplication and Transparent Feedback Badges
+- **Decision**: Automatically lowercase and de-duplicate leads upon file intake, displaying immediate count badges (`✓ N valid email addresses detected` and `⚠ M invalid / duplicate rows`) with an expandable rejected entries preview.
+- **Alternative Rejected**: Silently dropping invalid or duplicate rows without explaining why the count changed.
+- **Why**: Screen 4 explicitly mandates transparent verification badges. Users importing 135 rows should immediately see why only 127 are scheduled rather than wondering why 8 disappeared.
+
+---
+
+### 19. Cross-Environment File Reading Strategy
+- **Decision**: Use `file.text()` with an automatic fallback to `FileReader.readAsText()`.
+- **Alternative Rejected**: Relying solely on `file.text()`.
+- **Why**: While modern evergreen browsers support `Blob.prototype.text()`, headless testing environments (jsdom) and older mobile browser webviews lack this method. A graceful fallback to standard `FileReader` guarantees 100% test reliability and legacy browser resilience.
+
 
