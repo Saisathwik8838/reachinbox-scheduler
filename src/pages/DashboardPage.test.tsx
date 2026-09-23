@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DashboardPage } from './DashboardPage';
 import { AuthProvider } from '../context/AuthContext';
+import { ToastProvider } from '../context/ToastContext';
 
 describe('DashboardPage', () => {
   let queryClient: QueryClient;
@@ -81,16 +82,22 @@ describe('DashboardPage', () => {
     });
   });
 
-  it('renders Scheduled view by default with header, tabs, and scheduled email rows', async () => {
-    render(
+  const renderDashboard = (initialEntry: string) => {
+    return render(
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <MemoryRouter initialEntries={['/dashboard/scheduled']}>
-            <DashboardPage />
-          </MemoryRouter>
+          <ToastProvider>
+            <MemoryRouter initialEntries={[initialEntry]}>
+              <DashboardPage />
+            </MemoryRouter>
+          </ToastProvider>
         </AuthProvider>
       </QueryClientProvider>
     );
+  };
+
+  it('renders Scheduled view by default with header, tabs, and scheduled email rows', async () => {
+    renderDashboard('/dashboard/scheduled');
 
     expect(screen.getByRole('heading', { name: /emails/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /compose new email/i })).toBeInTheDocument();
@@ -102,39 +109,22 @@ describe('DashboardPage', () => {
   });
 
   it('renders Sent view with delivery error reason when on /dashboard/sent route', async () => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <MemoryRouter initialEntries={['/dashboard/sent']}>
-            <DashboardPage />
-          </MemoryRouter>
-        </AuthProvider>
-      </QueryClientProvider>
-    );
+    renderDashboard('/dashboard/sent');
 
     expect(await screen.findByText('ines.duarte@vela.pt')).toBeInTheDocument();
     expect(screen.getByText('Failed')).toBeInTheDocument();
     expect(screen.getByText('550 Mailbox unavailable')).toBeInTheDocument();
   });
 
-  it('dispatches open-compose-modal event when Compose button is clicked', async () => {
-    const eventSpy = vi.fn();
-    window.addEventListener('open-compose-modal', eventSpy);
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <MemoryRouter initialEntries={['/dashboard/scheduled']}>
-            <DashboardPage />
-          </MemoryRouter>
-        </AuthProvider>
-      </QueryClientProvider>
-    );
+  it('opens ComposeModal when Compose button is clicked', async () => {
+    renderDashboard('/dashboard/scheduled');
 
     const composeBtn = screen.getByRole('button', { name: /compose new email/i });
     await userEvent.click(composeBtn);
 
-    expect(eventSpy).toHaveBeenCalledTimes(1);
-    window.removeEventListener('open-compose-modal', eventSpy);
+    expect(await screen.findByRole('dialog')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Compose New Email' })
+    ).toBeInTheDocument();
   });
 });

@@ -135,4 +135,32 @@ This log records every significant technical and architectural decision, the alt
 - **Alternative Rejected**: Relying solely on `file.text()`.
 - **Why**: While modern evergreen browsers support `Blob.prototype.text()`, headless testing environments (jsdom) and older mobile browser webviews lack this method. A graceful fallback to standard `FileReader` guarantees 100% test reliability and legacy browser resilience.
 
+---
+
+### 20. Mathematical Simulation of Clock-Hour Quota Windows in Pure Logic
+- **Decision**: Build `estimateSendPlan` in `src/lib/sendPlanEstimator.ts` simulating exact clock-hour windows (e.g. 10:00–10:59:59) and minimum delay intervals.
+- **Alternative Rejected**: Simple static division (`total / limit`).
+- **Why**: Simple division fails when a schedule begins mid-hour (e.g. 10:30 AM). If a batch starts at 10:30 with an hourly cap of 100, only the first 100 can be sent in that clock hour before rolling into the 11:00 window. Simulating clock hour boundaries replicates backend rate-limiting reality and gives users an honest, accurate completion estimate.
+
+---
+
+### 21. Local Timezone Interpretation with ISO UTC API Normalization
+- **Decision**: Accept start time input via native `datetime-local` in the user's local timezone and convert it to standard ISO UTC string (`toISOString()`) upon API transmission.
+- **Alternative Rejected**: Forcing users to enter UTC times or transmitting un-timezone-qualified strings.
+- **Why**: Users schedule emails according to their local business hours. Converting to ISO UTC on transmission ensures backend workers execute jobs at the intended moment regardless of where the server cluster is hosted. If a past time is selected, an informational hint clarifies that sending will begin immediately.
+
+---
+
+### 22. Unsaved Changes Guard via Accessible Confirmation Dialog
+- **Decision**: Intercept modal closure (`Escape`, backdrop click, or Cancel button) if the user has entered text or uploaded leads, prompting confirmation before clearing draft state.
+- **Alternative Rejected**: Silently closing and discarding user work on accidental backdrop clicks.
+- **Why**: Uploading a lead list and composing custom campaign copy takes effort. Accidentally tapping the background or hitting Escape shouldn't wipe user work without confirmation.
+
+---
+
+### 23. Server Field Error to Inline Input Mapping Strategy
+- **Decision**: When the backend returns a 400 with a structured `fieldErrors` map, bind the errors directly to their corresponding `Input` and `Textarea` components while clearing errors as soon as the user edits the field.
+- **Alternative Rejected**: Showing a generic alert box without pointing to the offending input.
+- **Why**: Inline field errors provide immediate spatial context, allowing users to pinpoint and fix specific validation issues (e.g. "Subject cannot be empty") without guesswork.
+
 

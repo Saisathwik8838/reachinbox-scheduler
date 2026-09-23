@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   useLocation,
   useNavigate,
@@ -19,10 +19,20 @@ import {
   formatFullDateTimeWithZone,
 } from '../lib/dateUtils';
 
+import { ComposeModal } from '../components/email/ComposeModal';
+
 export function DashboardPage(): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isComposeOpen, setIsComposeOpen] = useState(false);
+
+  // Listen for open-compose-modal custom event
+  useEffect(() => {
+    const handleOpen = () => setIsComposeOpen(true);
+    window.addEventListener('open-compose-modal', handleOpen);
+    return () => window.removeEventListener('open-compose-modal', handleOpen);
+  }, []);
 
   // Active tab derived directly from URL path
   const isSentTab = location.pathname.includes('/sent');
@@ -252,11 +262,7 @@ export function DashboardPage(): React.ReactElement {
               variant="primary"
               size="md"
               leftIcon={<Plus className="w-4 h-4 stroke-[2.5]" />}
-              onClick={() => {
-                // In milestone 6 this will trigger ComposeModal
-                const event = new CustomEvent('open-compose-modal');
-                window.dispatchEvent(event);
-              }}
+              onClick={() => setIsComposeOpen(true)}
             >
               Compose New Email
             </Button>
@@ -289,9 +295,7 @@ export function DashboardPage(): React.ReactElement {
                 variant="primary"
                 size="md"
                 leftIcon={<Plus className="w-4 h-4 stroke-[2.5]" />}
-                onClick={() => {
-                  window.dispatchEvent(new CustomEvent('open-compose-modal'));
-                }}
+                onClick={() => setIsComposeOpen(true)}
               >
                 Compose New Email
               </Button>
@@ -299,6 +303,13 @@ export function DashboardPage(): React.ReactElement {
           }
         />
       </main>
+
+      {/* Compose Email Modal */}
+      <ComposeModal
+        isOpen={isComposeOpen}
+        onClose={() => setIsComposeOpen(false)}
+        onSuccessNavigate={() => navigate('/dashboard/scheduled?page=1')}
+      />
     </div>
   );
 }
