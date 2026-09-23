@@ -30,30 +30,9 @@ export default function App(): React.ReactElement {
 
               {/* Protected Routes */}
               <Route element={<RequireAuth />}>
-                <Route path="/dashboard" element={<DashboardPage />}>
-                  <Route
-                    index
-                    element={<Navigate to="/dashboard/scheduled" replace />}
-                  />
-                  <Route
-                    path="scheduled"
-                    element={
-                      <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-card">
-                        <h2 className="text-xl font-bold text-gray-900">Scheduled Emails</h2>
-                        <p className="text-sm text-gray-500 mt-1">Ready for Milestone 4 table implementation</p>
-                      </div>
-                    }
-                  />
-                  <Route
-                    path="sent"
-                    element={
-                      <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-card">
-                        <h2 className="text-xl font-bold text-gray-900">Sent Emails</h2>
-                        <p className="text-sm text-gray-500 mt-1">Ready for Milestone 4 table implementation</p>
-                      </div>
-                    }
-                  />
-                </Route>
+                <Route path="/dashboard" element={<Navigate to="/dashboard/scheduled" replace />} />
+                <Route path="/dashboard/scheduled" element={<DashboardPage />} />
+                <Route path="/dashboard/sent" element={<DashboardPage />} />
               </Route>
 
               {/* Root & Catch-all Fallbacks */}

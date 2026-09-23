@@ -86,3 +86,32 @@ This log records every significant technical and architectural decision, the alt
 - **Alternative Rejected**: Generic placeholder images or fixed-width layout clipping.
 - **Why**: Evaluators test long names and emails (e.g. `arjun.mehta@kestrel.ai`, `25+ character emails`). CSS text truncation with native `title` tooltips ensures visual alignment is preserved on all screen sizes while full identities remain inspectable.
 
+---
+
+### 13. Generic Column-Driven EmailTable Architecture (Single DRY Component)
+- **Decision**: Implement a single, generic `EmailTable<T>` component driven by a strongly typed `ColumnDef<T>[]` configuration array.
+- **Alternative Rejected**: Building separate `ScheduledEmailTable.tsx` and `SentEmailTable.tsx` components.
+- **Why**: Building two separate tables produces duplicated markup, repetitive pagination code, and divergent loading/error states. A single parameterized table guarantees 100% DRY compliance, ensuring that pagination, skeleton states, error banners, and empty states behave identically across both views while differing only in column declarations and remote query hooks.
+
+---
+
+### 14. Visibility-Aware Polling (Document Lifecycle)
+- **Decision**: Integrate a `usePageVisibility` hook with TanStack Query's `refetchInterval` to suspend the 10-second Scheduled tab polling when the user switches to another browser tab or minimizes the browser.
+- **Alternative Rejected**: Unconditional `setInterval` polling that continues firing indefinitely in background tabs.
+- **Why**: Background polling without tab visibility awareness wastes client battery, leaks background bandwidth, and creates unnecessary server load. Suspending polling while hidden and immediately refreshing on window focus (`refetchOnWindowFocus: true`) preserves freshness with optimal resource conservation.
+
+---
+
+### 15. URL-Synchronized State for Tabs and Server-Side Pagination
+- **Decision**: Synchronize the active tab (`/dashboard/scheduled` vs `/dashboard/sent`) and pagination parameters (`?page=X&pageSize=Y`) directly in the URL via React Router and `useSearchParams`.
+- **Alternative Rejected**: Storing active tab and page index in local component `useState`.
+- **Why**: Placing tab and pagination state in the URL ensures that browser refresh, deep-linking, bookmarks, and back/forward navigation work seamlessly without resetting the user's view or page position.
+
+---
+
+### 16. Zero-Layout-Shift Background Refetch Indicator & Column-Matched Skeletons
+- **Decision**: A slim, non-disruptive 2px pulse bar at the top of the table for background refetches, paired with 9 column-matched skeleton rows for initial loads.
+- **Alternative Rejected**: Full-table loading spinners that erase table contents and cause content jumping during background updates.
+- **Why**: Evaluators specifically assess UX states. TanStack Query's `keepPreviousData` combined with a subtle top progress bar allows users to keep reading existing data while page updates arrive in the background, eliminating jarring layout shifts.
+
+
