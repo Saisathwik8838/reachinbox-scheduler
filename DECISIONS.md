@@ -36,3 +36,25 @@ This log records every significant technical and architectural decision, the alt
 - **Decision**: Enforce a 2MB file cap and a maximum of 5,000 rows client-side in `lib/csvParser.ts`.
 - **Alternative Rejected**: Allowing unbounded file uploads or relying entirely on backend parsing.
 - **Why**: Parsing massive files purely on the main thread would freeze the browser UI during CSV regex operations. Capping at 2MB/5,000 rows protects client responsiveness while immediately surfacing clear, helpful feedback (counts of valid, invalid, and duplicate leads) before network transmission.
+
+---
+
+### 6. Accessible Modal/Dialog: Hand-crafted Focus Trap & Portal vs External Library (Headless UI / Radix)
+- **Decision**: Hand-crafted React Portal dialog with custom focus trap, scroll lock, and keyboard listeners.
+- **Alternative Rejected**: Pulling in `@headlessui/react` or `@radix-ui/react-dialog`.
+- **Why**: The assignment asks candidates to avoid heavy UI dependencies and to be able to explain every primitive in an interview. Our hand-crafted `Dialog` implements exact WCAG 2.1 modal semantics: `role="dialog"`, `aria-modal="true"`, `aria-labelledby`, body scroll lock, focus trap (cycling Tab / Shift+Tab between active focusable elements), and restoring focus to the trigger on close, requiring zero third-party dependencies.
+
+---
+
+### 7. Toast Notification Architecture: React Context + aria-live vs External Libraries (Sonner / React Hot Toast)
+- **Decision**: Lightweight `ToastContext` with `aria-live="polite"` region and self-dismissing cards.
+- **Alternative Rejected**: Third-party toast packages (Sonner, react-toastify, react-hot-toast).
+- **Why**: Screen 7 defines an exact toast layout (green checkmark / red exclamation icon pill, bold title, subtitle, top-right absolute positioning, dismiss button, auto-fade). A custom Context provider is ~70 lines of clean, understandable code, zero dependency footprint, and accessible to screen readers natively.
+
+---
+
+### 8. Semantic Table Architecture: Compound Primitives with Responsive Overflow
+- **Decision**: Semantic HTML `table` primitives (`Table`, `TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`) wrapped in an `overflow-x-auto` container.
+- **Alternative Rejected**: CSS Grid / Flexbox table emulations.
+- **Why**: Real HTML `<table>` elements provide natural accessibility for screen readers and tab navigation. Wrapping them in a responsive scroll container ensures that wide table columns gracefully scroll on narrow laptop or mobile viewports without breaking the outer dashboard layout.
+
