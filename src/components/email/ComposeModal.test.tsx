@@ -134,7 +134,9 @@ describe('ComposeModal', () => {
     const handleClose = vi.fn();
     renderModal(true, handleClose);
 
-    await userEvent.type(screen.getByLabelText(/subject/i), 'Unsaved draft');
+    fireEvent.change(screen.getByLabelText(/subject/i), {
+      target: { value: 'Unsaved draft' },
+    });
 
     // Click cancel button
     const cancelBtn = screen.getByRole('button', { name: /cancel/i });

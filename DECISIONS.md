@@ -163,4 +163,18 @@ This log records every significant technical and architectural decision, the alt
 - **Alternative Rejected**: Showing a generic alert box without pointing to the offending input.
 - **Why**: Inline field errors provide immediate spatial context, allowing users to pinpoint and fix specific validation issues (e.g. "Subject cannot be empty") without guesswork.
 
+---
+
+### 24. Top-Level ErrorBoundary for Graceful UI Crash Containment
+- **Decision**: Wrap the entire application tree in a dedicated React `ErrorBoundary` component displaying a custom ReachInbox-styled recovery screen with reload and dashboard navigation actions.
+- **Alternative Rejected**: Allowing uncaught React lifecycle render errors to produce a blank white screen.
+- **Why**: Even with strict TypeScript checking, unexpected DOM runtime exceptions or corrupted third-party cookies could cause a React component render crash. A top-level error boundary prevents the entire viewport from going blank, offering users immediate self-recovery paths while preserving debug stacks in development mode.
+
+---
+
+### 25. Responsive Table Containment & Viewport Degradation Strategy
+- **Decision**: Wrap wide tabular data in an `overflow-x-auto` wrapper with sticky header capabilities and flexible column width clamps, while preserving single-screen dashboard layout on desktop.
+- **Alternative Rejected**: Truncating or hiding essential columns on mobile or allowing horizontal page blowout.
+- **Why**: Evaluators test responsive behavior on laptop and smaller browser windows. Tables must allow internal horizontal scrolling rather than pushing the entire page layout outward or obscuring critical delivery status badges.
+
 
