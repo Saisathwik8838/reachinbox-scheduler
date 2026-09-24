@@ -1,0 +1,29 @@
+Email,First Name,Last Name,Company,Role
+saisathwik@reachinbox.ai,Sai,Sathwik,ReachInbox,Product Lead
+maya.chen@northwind.co,Maya,Chen,Northwind Traders,Head of Growth
+daniel.okafor@brightlabs.io,Daniel,Okafor,BrightLabs,Engineering Director
+sofia.rossi@lumen.dev,Sofia,Rossi,Lumen Dynamics,VP of Marketing
+arjun.mehta@kestrel.ai,Arjun,Mehta,Kestrel AI,CTO
+lena.fischer@orbit.de,Lena,Fischer,Orbit Systems,Product Manager
+tom.baker@fieldnote.com,Tom,Baker,Fieldnote,Operations Lead
+ines.duarte@vela.pt,Ines,Duarte,Vela Software,Founder & CEO
+owen.reyes@stackly.io,Owen,Reyes,Stackly,Head of Sales
+nina.patel@brightpath.com,Nina,Patel,BrightPath,Talent Acquisition
+bilal.ahmed@quorum.app,Bilal,Ahmed,Quorum Technologies,Data Architect
+ava.nguyen@tidewater.co,Ava,Nguyen,Tidewater Labs,Customer Success Lead
+kenji.tanaka@parcel.jp,Kenji,Tanaka,Parcel Logistics,Lead Developer
+clara.morin@apexflow.fr,Clara,Morin,ApexFlow,UX Design Lead
+liam.o.connor@celticcloud.ie,Liam,O'Connor,Celtic Cloud,Infrastructure Lead
+charlotte.dubois@solaris.eu,Charlotte,Dubois,Solaris Tech,Chief Revenue Officer
+mateo.silva@andeslogic.cl,Mateo,Silva,Andes Logic,Solutions Architect
+priya.sharma@zenithscale.in,Priya,Sharma,ZenithScale,Marketing Director
+hannah.schmidt@krugertech.de,Hannah,Schmidt,Kruger Tech,VP Engineering
+lucas.alvarez@riocore.br,Lucas,Alvarez,RioCore,Security Engineer
+elena.popov@danubesoft.at,Elena,Popov,DanubeSoft,QA Lead
+marcus.vance@vanguardsec.co.uk,Marcus,Vance,Vanguard Security,Compliance Director
+yuki.sato@kyotoworks.jp,Yuki,Sato,KyotoWorks,AI Research Scientist
+tariq.mansoor@oasisai.ae,Tariq,Mansoor,Oasis AI,Managing Director
+olivia.wright@evergreenventures.com,Olivia,Wright,Evergreen Ventures,Principal Investor
+saisathwik@reachinbox.ai,Sai,Sathwik,ReachInbox,Duplicate Entry
+invalid-lead-no-at-sign.com,Broken,Record,GhostCorp,Invalid Row
+bad_email_format@@missingdomain,Corrupted,Email,VoidSoft,Malformed Email
