@@ -1,6 +1,9 @@
 import { PaginatedEmails, ScheduleRequest, ScheduleResponse, User } from '../types/email';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE_URL =
+  typeof import.meta.env.VITE_API_URL === 'string' && import.meta.env.VITE_API_URL !== ''
+    ? import.meta.env.VITE_API_URL
+    : (import.meta.env.PROD ? '' : 'http://localhost:4000');
 
 export class ApiError extends Error {
   status: number;
