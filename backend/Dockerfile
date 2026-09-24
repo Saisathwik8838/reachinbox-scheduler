@@ -29,4 +29,4 @@ COPY --from=builder /app/dist ./dist
 
 EXPOSE 4000
 
-CMD ["sh", "-c", "npx prisma db push && node dist/index.js"]
+CMD ["sh", "-c", "until npx prisma db push; do echo 'Waiting for database...'; sleep 2; done && node dist/index.js"]

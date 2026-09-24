@@ -92,8 +92,8 @@ async function reconcileScheduledEmails() {
 }
 
 // Start Server
-const server = app.listen(env.PORT, async () => {
-  logger.info(`Server running on port ${env.PORT}`);
+const server = app.listen(env.PORT, "0.0.0.0", async () => {
+  logger.info(`Server running on port ${env.PORT} (0.0.0.0)`);
 
   try {
     // Make sure test senders exist in the database
